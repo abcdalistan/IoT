@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "336624542018",
+    "firebase_url": "https://nodemcu-c958b.firebaseio.com",
+    "project_id": "nodemcu-c958b",
+    "storage_bucket": "nodemcu-c958b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:336624542018:android:f563861c39d55be7bb28db",
+        "android_client_info": {
+          "package_name": "com.example.posturedetector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "336624542018-cav23peiekvdcff1autu6ra5gimjsjv2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.posturedetector",
+            "certificate_hash": "c3998f81ef73b0e0fed37a176cc2c8fd2d444b13"
+          }
+        },
+        {
+          "client_id": "336624542018-pqsktukve2k9sadfm4k3ll27mc4bjq43.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-Q6nCXPFlihi-BgjerHRsV55phoYMfaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "336624542018-pqsktukve2k9sadfm4k3ll27mc4bjq43.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
