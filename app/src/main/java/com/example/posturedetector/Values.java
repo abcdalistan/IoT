@@ -1,22 +1,30 @@
 package com.example.posturedetector;
 
 public class Values {
-    String angle;
-    String status;
+    public String Angle;
+    public String Status;
 
-    public Values(){
+    public Values() {
+    }
 
+    public Values(String Angle, String Status) {
+        this.Angle = Angle;
+        this.Status = Status;
     }
-    public String getAngle(){
-        return angle;
+
+    public String getAngle() {
+        return Angle;
     }
-    public void setAngle(String angle){
-        this.angle = angle;
+
+    public void setAngle(String Angle) {
+        this.Angle = Angle;
     }
-    public String getStatus(){
-        return status;
+
+    public String getStatus() {
+        return Status;
     }
-    public void setStatus(String angle){
-        this.angle = status;
+
+    public void setStatus(String Status) {
+        this.Status = Status;
     }
 }
