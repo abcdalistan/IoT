@@ -11,6 +11,8 @@
 //#define DHTTYPE DHT11
 //DHT dht(DHTPIN, DHTTYPE);
 int vbr = 4;
+int blue = 16;
+int red = 5;
 
 
 void setup() {
@@ -18,6 +20,8 @@ Serial.begin(9600);
 //Serial.println(F("DHTxx test!"));
 //dht.begin();
 pinMode(vbr, OUTPUT);
+pinMode(blue, OUTPUT);
+pinMode(red, OUTPUT);
 pinMode(flex, INPUT);
 
 
@@ -40,11 +44,10 @@ delay(10000);
 }
 int n = 0;
 int a=0;
-int data=0;
 void loop() {
 
 //float t = dht.readTemperature();
-data= analogRead(flex);
+int data= analogRead(flex);
 //float value = map(data, 700, 900, 0, 255);
 //float voltage= (data*4.98)/1023.0;
 //float r= 47500.0*(4.98/voltage)-1.0;
@@ -52,12 +55,14 @@ data= analogRead(flex);
 //Serial.println("Resistance: " + String(r)+ " ohms");
 //Firebase.setFloat("value", t);
 //float angle = map(r, 37300.0, 90000.0, 0, 90.0);
-Serial.println("Bend: "+String(data) +" degrees");
+Serial.println("Bend:");
+Serial.println(data);
+Serial.println("Degrees");
 Firebase.setInt("Values/Angle", data);
 Serial.println();
 //Firebase.pushInt("angle", data);
 //Firebase.getFloat("value");
-delay(10000);
+delay(500);
 /*n= Firebase.getInt("LED_STATUS");
 if (n==1){
   Serial.println("LED ON");
@@ -73,16 +78,19 @@ else{
 
 a= Firebase.getInt("Values/Angle");
 
-if (a<=6){
+if (a<=135){
   digitalWrite(vbr, HIGH);
-  delay(2000);
- 
-  Firebase.setString("Values/Status", "bad");
+  delay(500);
+  digitalWrite(red, HIGH);
+  digitalWrite(blue, LOW);
+  Firebase.setString("Values/Status", "Bad");
   return;
 }
 else{
   digitalWrite(vbr, LOW);
-  delay(600);
-  Firebase.setString("Values/Status", "normal");
+  digitalWrite(red, LOW);
+  digitalWrite(blue, HIGH);
+  delay(500);
+  Firebase.setString("Values/Status", "Good");
 }
 }
