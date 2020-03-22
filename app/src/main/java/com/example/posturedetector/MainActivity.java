@@ -25,6 +25,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase db;
     TextView posture, position;
     String angle, status;
+    Value value;
     ArrayList<String> arrayList = new ArrayList<>();
     ArrayAdapter<String> adapter;
 
@@ -53,62 +56,119 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        db = FirebaseDatabase.getInstance();
         listView = (ListView) findViewById(R.id.listview);
         posture = (TextView) findViewById(R.id.angle);
         position = (TextView) findViewById(R.id.status);
-        Button save = (Button) findViewById(R.id.save);
-        Button showdata = (Button) findViewById(R.id.showdata);
-        Calendar calendar = Calendar.getInstance();
-        final long currentDate= System.currentTimeMillis();
-        SimpleDateFormat simpleDateFormat= new SimpleDateFormat("MMM dd yyyy , hh:mm:ss a");
-        final String dataString = simpleDateFormat.format(currentDate);
-        dref = db.getInstance().getReference("Values");
+        Button save = findViewById(R.id.save);
+        //Button showdata = findViewById(R.id.showdata);
+        value = new Value();
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
         listView.setAdapter(adapter);
-        dref.child("Date").setValue(dataString);
+        Calendar calendar = Calendar.getInstance();
+        final long currentDate = System.currentTimeMillis();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd yyyy , hh:mm:ss a");
+        final String dataString = simpleDateFormat.format(currentDate);
+
+        db = FirebaseDatabase.getInstance();
+        dref = db.getReference().child("Values");
         dref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String data = dataSnapshot.child("Angle").getValue().toString();
                 String value = dataSnapshot.child("Status").getValue().toString();
+                DatabaseReference reff = db.getReference().child("Values/Date");
+                reff.setValue(dataString);
                 posture.setText(data);
                 position.setText(value);
-                //dref.child("Date").setValue(currentDate);
                 arrayList.add("Angle: " + data + " degrees" + " Status: " + value + "  Time/Date: " + dataString);
                 adapter.notifyDataSetChanged();
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*values.setAngle(posture.getText().toString());
-              values.setStatus(position.getText().toString());
-              dref.child(String.valueOf(maxid+1)).setValue(values);*/
-                String val = position.getText().toString();
-                float value = Float.parseFloat(posture.getText().toString());
-                String key = dref.push().getKey();
-                dref.child(key).child("Angle").setValue(value);
-                dref.child(key).child("Status").setValue(val);
-                dref.child(key).child("Date").setValue(dataString);
-
+                value.setAngle(posture.getText().toString());
+                value.setPosition(position.getText().toString());
+                value.setTimedate(dataString);
+                dref.child(value.getTimedate()).setValue(value).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(MainActivity.this, "Successfully recorded!", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Failed!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
         });
-        showdata.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ShowData.class);
-                startActivity(intent);
-
-            }
-        });
+//        showdata.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MainActivity.this, ShowData.class);
+//                startActivity(intent);
+//
+//            }
+//        });
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+//        Calendar calendar = Calendar.getInstance();
+//        final long currentDate= System.currentTimeMillis();
+//        SimpleDateFormat simpleDateFormat= new SimpleDateFormat("MMM dd yyyy , hh:mm:ss a");
+//        final String dataString = simpleDateFormat.format(currentDate);
+//        dref = db.getInstance().getReference("Values");
+//        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayList);
+//        listView.setAdapter(adapter);
+//        dref.child("Date").setValue(dataString);
+//        dref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                String data = dataSnapshot.child("Angle").getValue().toString();
+//                String value = dataSnapshot.child("Status").getValue().toString();
+//                posture.setText(data);
+//                position.setText(value);
+//                //dref.child("Date").setValue(currentDate);
+//                arrayList.add("Angle: " + data + " degrees" + " Status: " + value + "  Time/Date: " + dataString);
+//                adapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//            }
+//        });
+//
+//        save.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//              /*values.setAngle(posture.getText().toString());
+//              values.setStatus(position.getText().toString());
+//              dref.child(String.valueOf(maxid+1)).setValue(values);*/
+//                String val = position.getText().toString();
+//                float value = Float.parseFloat(posture.getText().toString());
+//                String key = dref.push().getKey();
+//                dref.child(key).child("Angle").setValue(value);
+//                dref.child(key).child("Status").setValue(val);
+//                dref.child(key).child("Date").setValue(dataString);
+//
+//            }
+//        });
+
 
 
      /*   dref.addChildEventListener(new ChildEventListener() {
